@@ -1,27 +1,14 @@
-from typing import Union, Any, Optional, Callable, Tuple
-from abc import ABC, abstractmethod
 import eagerpy as ep
 import numpy as np
-from scipy.stats import norm
-import torch.nn.functional as F
 import torch
 import librosa
-import torchvision.transforms as transforms
-from foolbox.devutils import flatten
-from foolbox.devutils import atleast_kd
-from foolbox.types import Bounds
 from foolbox.models.base import Model
 from foolbox.criteria import Misclassification, TargetedMisclassification
-from foolbox.distances import l1, l2, linf
-from foolbox.attacks.base import FixedEpsilonAttack
 from foolbox.attacks.base import T
 from foolbox.attacks.base import get_criterion
 from foolbox.attacks.base import raise_if_kwargs
 from foolbox.attacks.base import verify_input_bounds
-from typing import Optional
-from foolbox.attacks.gradient_descent_base import AdamOptimizer, GDOptimizer, Optimizer
 from foolbox.attacks.gradient_descent_base import LinfBaseGradientDescent
-from foolbox.attacks.deepfool import LinfDeepFoolAttack
 from typing import Union, Optional, Tuple, Any, Callable
 from tqdm import tqdm
 
@@ -84,7 +71,7 @@ class FA3_PGD(LinfBaseGradientDescent):
         else:
             x = x0
         x0 = x0.raw
-        # 频率权重数组 weights
+
         freqs = librosa.mel_frequencies(n_mels=128)
         weights = librosa.A_weighting(freqs)
 
@@ -96,7 +83,6 @@ class FA3_PGD(LinfBaseGradientDescent):
         normalized_weights[104:] = np.interp(weights[104:], (np.min(weights[104:]), np.max(weights[104:])),
                                              (normalized_weights[19], 0.03))
 
-        # 将权重线性映射到目标范围
         # normalized_weights = np.interp(weights, (np.min(weights), np.max(weights)), (0.06,0.02))
 
         normalized_weights = torch.from_numpy(normalized_weights / 40)
@@ -245,7 +231,7 @@ class FA3_FGSM(LinfBaseGradientDescent):
             x = x0
 
         x0 = x0.raw
-        # 频率权重数组 weights
+
         freqs = librosa.mel_frequencies(n_mels=128)
         weights = librosa.A_weighting(freqs)
 
@@ -257,7 +243,6 @@ class FA3_FGSM(LinfBaseGradientDescent):
         normalized_weights[104:] = np.interp(weights[104:], (np.min(weights[104:]), np.max(weights[104:])),
                                              (normalized_weights[19], 0.03))
 
-        # 将权重线性映射到目标范围
         # normalized_weights = np.interp(weights, (np.min(weights), np.max(weights)), (0.06,0.02))
 
         normalized_weights = torch.from_numpy(normalized_weights / 1)
@@ -340,7 +325,7 @@ class FA3_MIM(LinfBaseGradientDescent):
             x = x0
 
         x0 = x0.raw
-        # 频率权重数组 weights
+
         freqs = librosa.mel_frequencies(n_mels=128)
         weights = librosa.A_weighting(freqs)
 
@@ -352,7 +337,7 @@ class FA3_MIM(LinfBaseGradientDescent):
         normalized_weights[104:] = np.interp(weights[104:], (np.min(weights[104:]), np.max(weights[104:])),
                                              (normalized_weights[19], 0.03))
 
-        # 将权重线性映射到目标范围
+
         # normalized_weights = np.interp(weights, (np.min(weights), np.max(weights)), (0.06,0.02))
 
         normalized_weights = torch.from_numpy(normalized_weights / 40)

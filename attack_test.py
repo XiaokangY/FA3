@@ -121,93 +121,43 @@ if __name__ == '__main__':
         SR_4 = success4.float().mean(axis=-1)
         clipped_advs4[:, :, 0:9, :] = 0.0
         clipped_advs4[:, :, 123:127, :] = 0.0
-
         snr_OURSPGD = calculate_snr(test_data, clipped_advs4)
         snr_4 = snr_OURSPGD + snr_4
         Euclidean_distance_OURSPGD = average_euclidean_distance(test_data, clipped_advs4)
         Euclidean_distance_4 = Euclidean_distance_4 + Euclidean_distance_OURSPGD
         Manhattan_distance_OURSPGD = calculate_average_manhattan_distance(test_data, clipped_advs4)
         Manhattan_distance_4 = Manhattan_distance_4 + Manhattan_distance_OURSPGD
-
         ssim_OURS_PGD = calculate_mean_ssim(test_data, clipped_advs4)
         ssim_4 = ssim_4 + ssim_OURS_PGD
-        # L1_OURS, L2_OURS = compute_average_norms(test_data, clipped_advs4)
-        # L1_4 = L1_OURS + L1_4
-        # L2_4 = L2_OURS + L2_4
-        # dtw_OURS_PGD = calculate_average_dtw(test_data, clipped_advs4)
-        # dtw_4 = dtw_4 + dtw_OURS_PGD
-        # correlation_OURS_PGD = calculate_average_correlation(test_data, clipped_advs4)
-        # correlation_4 = correlation_OURS_PGD + correlation_4
-        # kl_divergence_OURS_PGD = compute_average_kl_divergence(test_data, clipped_advs4)
-        # kl_divergence_4 = kl_divergence_OURS_PGD + kl_divergence_4
 
-        # Calculate attack success rate
-        # print(f'LinfPGD:    {SR_1.item() * 100:4.1f}%\n'
-        #       f'MIM:        {SR_2.item() * 100:4.1f}%\n'
-        #       f'FGSM:       {SR_3.item() * 100:4.1f}%\n'
-        #       f'Ours:       {SR_4.item() * 100:4.1f}%\n')
         attack_data5 = torch.load(os.path.join('./data', f'class{class_id}', 'correct_datas.pt'))
         raw_advs5, clipped_advs5, success5 = FA3_MIM(f_model, attack_data5, attack_label, epsilons=0.08)
         SR_5 = success5.float().mean(axis=-1)
         clipped_advs5[:, :, 0:9, :] = 0.0
         clipped_advs5[:, :, 123:127, :] = 0.0
-        # stoi_OURSMIM = calculate_average_stoi(test_data, clipped_advs5)
-        # stoi_5 = stoi_OURSMIM + stoi_5
+
         snr_OURSMIM = calculate_snr(test_data, clipped_advs5)
         snr_5 = snr_OURSMIM + snr_5
-        European_distance_OURSMIM = average_euclidean_distance(test_data, clipped_advs5)
-        European_distance_5 = European_distance_5 + European_distance_OURSMIM
+        Euclidean_distance_OURSMIM = average_euclidean_distance(test_data, clipped_advs5)
+        Euclidean_distance_5 = Euclidean_distance_5 + Euclidean_distance_OURSMIM
         Manhattan_distance_OURSMIM = calculate_average_manhattan_distance(test_data, clipped_advs5)
         Manhattan_distance_5 = Manhattan_distance_5 + Manhattan_distance_OURSMIM
-        Cosine_similarity_OURS_MIM = calculate_mean_cosine_similarity(test_data, clipped_advs5)
-        Cosine_similarity_5 = Cosine_similarity_5 + Cosine_similarity_OURS_MIM
-        pearson_correlation_OURSMIM = calculate_average_pearson(test_data, clipped_advs5)
-        pearson_correlation_5 = pearson_correlation_OURSMIM + pearson_correlation_5
-        psnr_OURSMIM = calculate_psnr(test_data, clipped_advs5)
-        psnr_5 = psnr_OURSMIM + psnr_5
         ssim_OURS_MIM = calculate_mean_ssim(test_data, clipped_advs5)
         ssim_5 = ssim_5 + ssim_OURS_MIM
-        # L1_MIM, L2_MIM = compute_average_norms(test_data, clipped_advs2)
-        # L1_2 = L1_MIM + L1_2
-        # L2_2 = L2_MIM + L2_2
-        # dtw_OURS_MIM = calculate_average_dtw(test_data, clipped_advs5)
-        # dtw_5 = dtw_5 + dtw_OURS_MIM
-        # correlation_OURS_MIM = calculate_average_correlation(test_data, clipped_advs5)
-        # correlation_5 = correlation_OURS_MIM + correlation_5
-        # kl_divergence_OURS_MIM = compute_average_kl_divergence(test_data, clipped_advs5)
-        # kl_divergence_5 = kl_divergence_OURS_MIM + kl_divergence_5
 
         attack_data6 = torch.load(os.path.join('./data', f'class{class_id}', 'correct_datas.pt'))
         raw_advs6, clipped_advs6, success6 = FA3_FGSM(f_model, attack_data6, attack_label, epsilons=0.08)
         SR_6 = success6.float().mean(axis=-1)
         clipped_advs6[:, :, 0:9, :] = 0.0
         clipped_advs6[:, :, 123:127, :] = 0.0
-
-        # stoi_OURSFGSM = calculate_average_stoi(test_data, clipped_advs6)
-        # stoi_6 = stoi_OURSFGSM + stoi_6
         snr_OURSFGSM = calculate_snr(test_data, clipped_advs6)
         snr_6 = snr_OURSFGSM + snr_6
-        European_distance_OURSFGSM = average_euclidean_distance(test_data, clipped_advs6)
-        European_distance_6 = European_distance_6 + European_distance_OURSFGSM
+        Euclidean_distance_OURSFGSM = average_euclidean_distance(test_data, clipped_advs6)
+        Euclidean_distance_6 = Euclidean_distance_6 + Euclidean_distance_OURSFGSM
         Manhattan_distance_OURSFGSM = calculate_average_manhattan_distance(test_data, clipped_advs6)
         Manhattan_distance_6 = Manhattan_distance_6 + Manhattan_distance_OURSFGSM
-        Cosine_similarity_OURS_FGSM = calculate_mean_cosine_similarity(test_data, clipped_advs6)
-        Cosine_similarity_6 = Cosine_similarity_6 + Cosine_similarity_OURS_FGSM
-        pearson_correlation_OURSFGSM = calculate_average_pearson(test_data, clipped_advs6)
-        pearson_correlation_6 = pearson_correlation_OURSFGSM + pearson_correlation_6
-        psnr_OURSFGSM = calculate_psnr(test_data, clipped_advs6)
-        psnr_6 = psnr_OURSFGSM + psnr_6
         ssim_OURS_FGSM = calculate_mean_ssim(test_data, clipped_advs6)
         ssim_6 = ssim_6 + ssim_OURS_FGSM
-        # L1_MIM, L2_MIM = compute_average_norms(test_data, clipped_advs2)
-        # L1_2 = L1_MIM + L1_2
-        # L2_2 = L2_MIM + L2_2
-        # dtw_OURS_FGSM = calculate_average_dtw(test_data, clipped_advs6)
-        # dtw_6 = dtw_6 + dtw_OURS_FGSM
-        # correlation_OURS_FGSM = calculate_average_correlation(test_data, clipped_advs6)
-        # correlation_6 = correlation_OURS_FGSM + correlation_6
-        # kl_divergence_OURS_FGSM = compute_average_kl_divergence(test_data, clipped_advs6)
-        # kl_divergence_6 = kl_divergence_OURS_FGSM + kl_divergence_6
 
         Total_SR_1 = SR_1.item() + Total_SR_1
         Total_SR_2 = SR_2.item() + Total_SR_2
